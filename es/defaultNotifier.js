@@ -1,6 +1,12 @@
 import { DIFF_TYPES } from './deepDiff';
 
-export var defaultNotifier = function defaultNotifier(groupByComponent, collapseComponentGroups, displayName, diffs) {
+export var defaultNotifier = function defaultNotifier(
+  groupByComponent,
+  collapseComponentGroups,
+  displayName,
+  diffs
+) {
+  if (displayName == 'YellowBoxList' || displayName == 'YellowBox') return;
   if (groupByComponent && collapseComponentGroups) {
     console.groupCollapsed && console.groupCollapsed(displayName);
   } else if (groupByComponent) {
@@ -24,13 +30,15 @@ var consoleWarn = function consoleWarn(args) {
 
 var notifyDiff = function notifyDiff(_ref) {
   var name = _ref.name,
-      prev = _ref.prev,
-      next = _ref.next,
-      type = _ref.type;
+    prev = _ref.prev,
+    next = _ref.next,
+    type = _ref.type;
 
   switch (type) {
     case DIFF_TYPES.SAME:
-      consoleWarn(name + ': Value is the same (equal by reference). Avoidable re-render!');
+      consoleWarn(
+        name + ': Value is the same (equal by reference). Avoidable re-render!'
+      );
       console.log('Value:', prev);
       break;
     case DIFF_TYPES.EQUAL:
@@ -41,7 +49,7 @@ var notifyDiff = function notifyDiff(_ref) {
       // TODO: This logic should be moved in deepDiff and return a list of
       //       changed props
       if (prev && next) {
-        Object.keys(prev).forEach(function (key) {
+        Object.keys(prev).forEach(function(key) {
           if (prev[key] !== next[key]) {
             console.log('"' + key + '" property is not equal by reference');
           }
@@ -49,7 +57,9 @@ var notifyDiff = function notifyDiff(_ref) {
       }
       break;
     case DIFF_TYPES.FUNCTIONS:
-      consoleWarn(name + ': Changes are in functions only. Possibly avoidable re-render?');
+      consoleWarn(
+        name + ': Changes are in functions only. Possibly avoidable re-render?'
+      );
       console.log('Functions before:', prev);
       console.log('Functions after:', next);
       break;
